@@ -19,7 +19,7 @@ while True:
 
     if time > 1.6:
         sim.apply_force_vector(rocket, Vector(9.81, 270))
-    
+
     if time > 5 or rocket.y < 0:
         break
 
