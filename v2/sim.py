@@ -1,10 +1,8 @@
-import random
+"""Main driver file, runs sim"""
 from object import Object
 from rocket import Rocket
 from force import Force
 from globals import unit, Quantity, Q
-import math
-
 
 
 class Simulate:
@@ -39,9 +37,10 @@ class Simulate:
             self.update_object(obj, delta_t)
         self.time += delta_t
         return self.time
-    
+
 
     def apply_force(self, obj: Object, force:Force):
+        """Sets the x and y acceleration of the obj provided the force. A = F / M."""
         force.x = force.x.to("newton")
         force.y = force.y.to("newton")
         obj.mass = obj.mass.to("kilogram")
@@ -49,39 +48,36 @@ class Simulate:
         obj.ddx = (force.x / obj.mass).to("meter / second ** 2")
         obj.ddy = (force.y / obj.mass).to("meter / second ** 2")
 
-    # def apply_tangential_force(self)
 
-
-rocket = Rocket(
+rocket_obj = Rocket(
             # 27g = gimbal
             # 44.5g = https://estesrockets.com/products/d12-3-engines
-            # 76g = other stuff exp. to add, just under legal limit iirc
+            # 53g = other stuff exp. to add, just under legal limit iirc
             mass=    Q(27, "grams") \
                     +Q(44.5, "grams") \
                     +Q(53, "grams"),
 
             radius_to_cm = \
                     Q(50, "centimeter"),
-            
-            moment_of_inertia= \
-                    0.0144 * unit.kilogram * unit.meter**2,
+
+            moment_of_inertia= 0.0144 * unit.kilogram * unit.meter**2,
             # Engine: https://estesrockets.com/products/d12-3-engines
             thrust= Q(12, "newton"),
-            
-            burn_time= \
-                    Q(1.6, "second"),
+
+            burn_time= Q(1.6, "second"),
         )
 
 
-sim = Simulate([rocket])
-print(rocket.mass.to("kilogram"))
+sim = Simulate([rocket_obj])
+print(rocket_obj.mass.to("kilogram"))
 
 gravity_force = Force().as_angle(
                                     Q(180, "deg"),
-                                    Q(rocket.mass.to("kilogram").magnitude * 9.81, "newton"))
+                                    Q(rocket_obj.mass.to("kilogram").magnitude * 9.81, "newton"))
 
 
 def launch(rocket: Rocket):
+    """Simulates a rocket launch. Provide with rocket object"""
     while True:
         t = sim.step(delta_t=Q(10, "millisecond"))
         if t < rocket.burn_time:
