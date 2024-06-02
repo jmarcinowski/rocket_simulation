@@ -1,6 +1,4 @@
-"""
-Contains Force class
-"""
+"""Contains Force class"""
 import math
 from globals import Quantity, Q
 
@@ -8,7 +6,6 @@ from globals import Quantity, Q
 class Force:
     """
     Force class, keeps track of Force.x, Force,y.
-    
     Allows you to create a Force object with Force().as_angle(Quantity, Quantity).
     Allows you to get the magnitude of the vector with Force.magnitude
     """
@@ -24,7 +21,6 @@ class Force:
         **Requires Quantity objects!
         angle - Quantity(amount, "unit")
         mag - Quantity(amount, "unit")
-
         Returns - Force object
         """
         self.x = math.sin(angle.to("rad")) * mag
@@ -34,9 +30,7 @@ class Force:
 
 
     def magnitude(self):
-        """
-        Returns - magnitude of the vector as a float.
-        """
+        """Returns - magnitude of the vector as a float."""
         return (self.x**2 + self.y**2)**0.5
 
 
