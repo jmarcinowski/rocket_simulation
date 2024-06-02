@@ -72,8 +72,8 @@ sim = Simulate([rocket_obj])
 print(rocket_obj.mass.to("kilogram"))
 
 gravity_force = Force().as_angle(
-                                    Q(180, "deg"),
-                                    Q(rocket_obj.mass.to("kilogram").magnitude * 9.81, "newton"))
+                            Q(180, "deg"),
+                            Q(rocket_obj.mass.to("kilogram").magnitude * 9.81, "newton"))
 
 
 def launch(rocket: Rocket):
