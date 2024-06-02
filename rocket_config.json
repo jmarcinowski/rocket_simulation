@@ -1,9 +1,0 @@
-{
-    "mass_kg": 10,
-    "max_gimbal_degrees_x": 5,
-    "max_gimbal_degrees_y": 5,
-    "motor": {
-        "avg_newtons": 4.5,
-        "thrust_duration_sec": 1.6
-    }
-}
