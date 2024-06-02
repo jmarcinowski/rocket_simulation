@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from globals import unit, Quantity, Q
 
+
 @dataclass
 class Object:
     """object that contains position/rotation/mass attributes"""
