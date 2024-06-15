@@ -27,7 +27,9 @@ def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
     i = model_rocket.moment_of_inertia
 
     def rotational_acceleration(gimbal_angle):
-        return r * force * math.sin(gimbal_angle.to("rad")) / i
+        torque = r * force * math.sin(gimbal_angle.to("rad"))
+        rotational_acc = torque / i
+        return rotational_acc
 
     delta_t = Q(1, "millisecond")
     total_error = 0
