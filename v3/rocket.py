@@ -1,10 +1,11 @@
-"""Object class file"""
+"""Rocket class file"""
 from dataclasses import dataclass
-from globals import unit, Quantity, Q
+from globals import Quantity, Q, unit
 
 
 @dataclass
-class Object:
+class Rocket:
+    """Rocket Object. Includes thrust, burn_time, and max_dy on top of the Object attributes"""
     """object that contains position/rotation/mass attributes"""
     x:Quantity = Q(0, "meter")
     y:Quantity = Q(0, "meter")
@@ -24,3 +25,10 @@ class Object:
     radius_to_cg:Quantity = 50 * unit.centimeter
 
     apogee = y
+
+    thrust:Quantity = 0
+    burn_time:Quantity = 0
+    max_dy:Quantity = Q(0, "meter / second")
+    max_gimbal_angle:Quantity = Q(5, "degree")
+
+    pid_gains = {"P":-0.4, "D":-0.3}

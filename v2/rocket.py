@@ -10,3 +10,4 @@ class Rocket(Object):
     thrust:Quantity = 0
     burn_time:Quantity = 0
     max_dy:Quantity = Q(0, "meter / second")
+    max_gimbal_angle:Quantity = Q(5, "degree")
