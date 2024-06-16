@@ -31,4 +31,7 @@ class Rocket:
     max_dy:Quantity = Q(0, "meter / second")
     max_gimbal_angle:Quantity = Q(5, "degree")
 
-    pid_gains = {"P":-0.4, "D":-0.3}
+    pid_gains5opt = {"P":-0.4330524, "D": -0.2854928}
+    pid_gains10opt = {"P": -0.27639905, "D": -0.22370978} # 10 deg bank opt
+    pid_gains45opt = {"P": -0.36878566, "D": -0.38102046} # 45 deg bank opt
+

@@ -2,6 +2,7 @@
 import math
 from globals import Q
 from rocket import Rocket
+from model_rocket import model_rocket
 
 
 def pid(gains:dict, theta:Q, d_theta:Q) -> Q:
@@ -34,7 +35,7 @@ def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
     delta_t = Q(1, "millisecond")
     total_error = 0
 
-    for _ in range(2500):
+    for j in range(2500):
         model_rocket.d_theta += model_rocket.dd_theta * delta_t
         model_rocket.theta += model_rocket.d_theta * delta_t
         total_error += abs(model_rocket.theta)
@@ -44,4 +45,10 @@ def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
 
         model_rocket.dd_theta += rotational_acceleration(gimbal_angle.to("deg"))
 
+        # print(j, '\t',model_rocket.theta,'\t', model_rocket.d_theta)
+
     return total_error
+
+
+if __name__ == "__main__":
+    simulate_gains(model_rocket.pid_gains, model_rocket)
