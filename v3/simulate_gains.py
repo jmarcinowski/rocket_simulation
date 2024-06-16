@@ -27,9 +27,10 @@ def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
     force = model_rocket.thrust
     i = model_rocket.moment_of_inertia
 
-    def rotational_acceleration(gimbal_angle):
-        torque = r * force * math.sin(gimbal_angle.to("rad"))
-        rotational_acc = torque / i
+    def rotational_acceleration(radius_to_cm:Q, force:Q, gimbal_angle:Q, moment_of_inertia:Q) -> Q:
+        """Calculates change in rotational acceleration due to gimbal angle"""
+        torque = radius_to_cm * force * math.sin(gimbal_angle.to("rad"))
+        rotational_acc = torque / moment_of_inertia
         return rotational_acc
 
     delta_t = Q(1, "millisecond")
@@ -43,7 +44,7 @@ def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
         gimbal_angle = pid(gains, model_rocket.theta, model_rocket.d_theta)
         gimbal_angle = restrained_gimbal_angle(gimbal_angle, model_rocket.max_gimbal_angle)
 
-        model_rocket.dd_theta += rotational_acceleration(gimbal_angle.to("deg"))
+        model_rocket.dd_theta += rotational_acceleration(r, force, gimbal_angle.to("deg"), i)
 
         # print(j, '\t',model_rocket.theta,'\t', model_rocket.d_theta)
 
@@ -51,4 +52,4 @@ def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
 
 
 if __name__ == "__main__":
-    simulate_gains(model_rocket.pid_gains, model_rocket)
+    simulate_gains(model_rocket.pid_gains10opt, model_rocket)
