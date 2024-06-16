@@ -19,6 +19,6 @@ model_rocket = Rocket(
 
             burn_time= Q(1.6, "second"),
 
-            theta=Q(3, "deg"),
+            theta=Q(10, "deg"),
             max_gimbal_angle=Q(5, "degree")
         )

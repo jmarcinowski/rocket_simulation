@@ -20,6 +20,13 @@ def restrained_gimbal_angle(angle:Q, max_angle:Q) -> Q:
     return min(max_angle, angle)
 
 
+def rotational_acceleration_change_from_gimbal(radius_to_cm:Q, force:Q, gimbal_angle:Q, moment_of_inertia:Q) -> Q:
+    """Calculates change in rotational acceleration due to gimbal angle"""
+    torque = radius_to_cm * force * math.sin(gimbal_angle.to("rad"))
+    rotational_acc = torque / moment_of_inertia
+    return rotational_acc
+
+
 def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
     """Returns the total deviation of the model rocket during 2500 millisecond duration"""
 
@@ -27,14 +34,8 @@ def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
     force = model_rocket.thrust
     i = model_rocket.moment_of_inertia
 
-    def rotational_acceleration(radius_to_cm:Q, force:Q, gimbal_angle:Q, moment_of_inertia:Q) -> Q:
-        """Calculates change in rotational acceleration due to gimbal angle"""
-        torque = radius_to_cm * force * math.sin(gimbal_angle.to("rad"))
-        rotational_acc = torque / moment_of_inertia
-        return rotational_acc
-
     delta_t = Q(1, "millisecond")
-    total_error = 0
+    total_error = Q(0, "deg")
 
     for j in range(2500):
         model_rocket.d_theta += model_rocket.dd_theta * delta_t
@@ -44,7 +45,7 @@ def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
         gimbal_angle = pid(gains, model_rocket.theta, model_rocket.d_theta)
         gimbal_angle = restrained_gimbal_angle(gimbal_angle, model_rocket.max_gimbal_angle)
 
-        model_rocket.dd_theta += rotational_acceleration(r, force, gimbal_angle.to("deg"), i)
+        model_rocket.dd_theta += rotational_acceleration_change_from_gimbal(r, force, gimbal_angle, i)
 
         # print(j, '\t',model_rocket.theta,'\t', model_rocket.d_theta)
 
@@ -52,4 +53,5 @@ def simulate_gains(gains:dict, model_rocket:Rocket) -> float:
 
 
 if __name__ == "__main__":
-    simulate_gains(model_rocket.pid_gains10opt, model_rocket)
+    error = simulate_gains(model_rocket.pid_gains10opt, model_rocket)
+    print(error)
